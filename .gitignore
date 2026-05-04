@@ -1,0 +1,31 @@
+
+# Initialiser Git
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Output
+output/
+*.png
+*.jpg
+*.svg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Bicep temporaire
+*.json
+!examples/*.json
