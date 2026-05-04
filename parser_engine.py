@@ -8,7 +8,7 @@ def clean_label(raw_name):
         # On extrait ce qui est entre les premiers guillemets simples
         match = re.search(r"'([^']*)'", raw_name)
         if match:
-            return f"{match.group(1)}..." 
+            return f"{match.group(1)}..."
     
     # Nettoyage standard (enlève les crochets et prend la fin du chemin)
     clean = raw_name.split('/')[-1].replace("'", "").replace("]", "")
@@ -22,8 +22,6 @@ def extract_nodes_and_edges(arm_json_content):
     for res in resources:
         res_name = res['name']
         res_type = res['type']
-        
-        # --- LA MODIFICATION EST ICI ---
         # On utilise clean_label pour le texte qui s'affichera sous l'icône
         display_label = clean_label(res_name)
         
