@@ -1,84 +1,166 @@
+# Bicep Diagrams
+
+**Generate beautiful infrastructure diagrams from Azure Bicep templates**
+
+---
 
 
-# Génération de diagrammes d'infrastructure à partir de templates Bicep
+## outil de génération de diagrammes d'architecture à partir de fichiers Bicep.
+- diagram gpt
+- 
+-
 
-#  Résumé:
-Ce projet a pour but de développer un outil de visualisation de templates Bicep, un langage d'Infrastructure as Code pour décrire des ressources du cloud Azure et les provisionner automatiquement.
+## Overview
 
-#  Projet Technique:
-- Mots Clés : Diagrammes, Bicep, Infrastructure,
-- Équipe/Entité concernée :
-- Créé le 2026-03-12
-- Assigné le 2026-04-28
-- Sujet affecté à Gamal Daoud Youssouf
+This project provides a **CLI tool** that compiles Azure Bicep files to ARM JSON, extracts resources and their dependencies, and renders an architecture diagram using the [diagrams](https://github.com/mingrammer/diagrams) library.
 
-#  Description du Projet:
-Ce projet vise à combler le manque de visibilité sur les déploiements Azure en créant un outil capable de générer des diagrammes d'infrastructure directement depuis les templates Bicep.
+- **Dynamic clustering** – resources are automatically grouped (e.g., sub‑nets inside a virtual network).
+- **Custom styling** – a YAML‑driven configuration lets you map resource types to icons, colors, and labels.
+- **Multiple output formats** – PNG, SVG, PDF, D2, Mermaid, …
+- **Zero‑runtime dependencies** – the tool runs in a virtual environment with a single `requirements.txt`.
+
+---
+
+## Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/your‑username/bicep-diagrams.git
+cd bicep-diagrams
+
+# Create a virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+> **Tip**: The script requires the Azure CLI (`az`) to be installed and authenticated so it can compile Bicep files.
+
+---
+
+## 🚀 Quick Start
+
+```bash
+# Generate a PNG diagram from a Bicep file
+./bicep-diagrams.py path/to/template.bicep -o my_diagram -f png
+
+# Generate a sharper PNG
+./bicep-diagrams.py path/to/template.bicep -o my_diagram -f png --dpi 300
+
+# Best display quality in browsers, reports, and VS Code previews
+./bicep-diagrams.py path/to/template.bicep -o my_diagram -f svg
+
+# Flat graph close to ARM Viewer / Bicep visualizer
+./bicep-diagrams.py path/to/template.bicep -o my_diagram -f png --flat
+```
+
+The command compiles the Bicep file, parses the generated ARM JSON, and writes `my_diagram.png` in the current directory.
+For screen display, prefer SVG because it stays sharp at every zoom level. Use PNG when you need a raster image, and keep `--dpi 300` or higher.
+
+### Command‑line Options
+
+| Option | Description |
+|--------|-------------|
+| `filename` | Path to the Bicep file (required) |
+| `-o, --output` | Base name of the output file (defaults to the Bicep file name) |
+| `-f, --format` | Output format – `png`, `svg`, `pdf`, `d2`, `mermaid` (default: `png`) |
+| `--dpi` | PNG/PDF render resolution (default: `300`; use `600` for very large exports) |
+| `--flat` | Disable clusters to get a graph closer to ARM Viewer / Bicep visualizer |
+| `-h, --help` | Show help message |
+
+---
+
+## Configuration (`bicep-diagrams.yaml`)
+
+The YAML file lets you map Azure resource types to diagram nodes, styles, and clusters. A minimal example:
+
+```yaml
+resources:
+  Microsoft.Network/virtualNetworks:
+    kind: cluster
+    style:
+      bgcolor: "#F0F8FF"
+      label: "VNet"
+    icon:
+      classname: "diagrams.azure.network.VirtualNetwork"
+styles:
+  DependsOn:
+    color: "#888"
+    style: dotted
+```
+
+- **`kind: cluster`** – the resource will be rendered as a Graphviz cluster.
+- **`icon.classname`** – fully‑qualified class name from the `diagrams` library.
+- **`style`** – CSS‑like attributes passed to the node/cluster.
+
+Add more entries to cover the Azure services you need.
+
+---
+---
+
+## Testing
+
+The repository includes a small test suite that validates the parser against a known Bicep sample.
+
+```bash
+pytest tests/
+```
+
+---
+
+## ontributing
+
+1. Fork the repository.
+2. Create a feature branch (`git checkout -b feature/awesome‑feature`).
+3. Run the tests (`pytest`).
+4. Submit a pull request.
+
+Please follow the existing code style (PEP 8) and include unit tests for new functionality.
+
+---
+
+## License
+
+This project is licensed under the **MIT License** – see the `LICENSE` file for details.
+
+---
+
+## Contact
+
+- **Author**: Gamal Daoud Youssouf
+- **Supervisor**: Philippe Merle – [philippe.merle@univ-lille.fr](mailto:philippe.merle@univ-lille.fr)
+
+/Documents/BicepDiagrams/bicep-generator$ ./venv/bin/python bicep-diagrams.py output/test2.bicep 
+
+ou ici si fichiers exterieurs
+ bicep-generator/network_custom.bicep
+
+./venv/bin/python bicep-diagrams.py bicep-generator/network_custom.bicep
+
+on peut Voir le résultat:
+Documents/BicepDiagrams/bicep-generator$ xdg-open archi.png
+
+ou on utilse l'outil(ARM Viewer):
+Compiler Bicep en ARM JSON
+exemple:
+/Documents/BicepDiagrams/bicep-generator$ bicep build input/db.bicep --outfile output/db.json
+
+Ouvrir le fichier JSON dans VS Code
+
+Lancer ARM Viewer
+Dans VS Code, une fois le fichier JSON ouvert :
+
+  - Appuyez sur Ctrl+Shift+P
+  - Tapez "ARM Viewer: Preview"
+  - cliquez sur l'icône ARM Viewer dans la barre d'outils
 
 
-#  Encadrement:
-- Philippe Merle
-- contact : [philippe.merle@univ-lille.fr]
-
-#  Contexte:
-Bicep [1] est un langage d'Infrastructure as Code [2] pour décrire la configuration de ressources du cloud Azure (machines virtuelles, stockage, réseaux virtuels, etc.) puis de provisionner ces ressources de manière automatisée et reproductible.
+lien de projet
+https://projets-info.univ-lille.fr/master/etu/projects/32a14b31-c537-44dc-ae4e-8156151000bb
 
 
-Les templates Bicep, bien que puissants pour l'automatisation des déploiements sur Azure, souffrent d'un manque de visibilité. Il est difficile de comprendre l'architecture d'une application ou d'un service sans examiner attentivement le code source. De plus, les dépendances entre les ressources ne sont pas toujours claires, ce qui peut entraîner des erreurs lors des modifications ou des suppressions de ressources.
-
-
-#  Problématique:
-Un template Bicep peut devenir rapidement complexe à appréhender et comprendre dans son ensemble.
-
-
-#  Travail à effectuer:
-Ce projet vise à développer un outil de visualisation de templates Bicep. Pour cela, l'outil génèrera des diagrammes d'infrastructure à partir de templates Bicep. Cet outil s'inspirera des outils AWS CloudFormation Diagrams [3] et KubeDiagrams [4] développés dans l'équipe de recherche Spirals.
-
-# Plan de travail :
-
-1. Etablir un état de l'art des outils existants de génération de diagrammes pour Bicep.
-2. Etudier les constructions du langage Bicep.
-3. Proposer une transformation des constructions du langage Bicep en éléments d'un diagramme d'infrastructure (noeud, arête, cluster).
-4. Implanter la transformation en utilisant la bibliothèque Diagrams [5].
-5. Appliquer l'outil développé sur le plus grand nombre de templates Bicep obtenus sur GitHub [6].
-
-
-
-#  Objectif:
-L'objectif de ce projet est de développer un outil capable de générer des diagrammes d'infrastructure à partir de templates Bicep. Ces diagrammes permettront de visualiser l'architecture des déploiements Azure, de comprendre les dépendances entre les ressources et de faciliter la maintenance et l'évolution des applications.
-
-#  Cahier des charges:
-Le projet devra permettre de générer des diagrammes d'infrastructure à partir de templates Bicep. Ces diagrammes devront permettre de visualiser l'architecture des déploiements Azure, de comprendre les dépendances entre les ressources et de faciliter la maintenance et l'évolution des applications.
-
-#  Livrables:
-- Un outil capable de générer des diagrammes d'infrastructure à partir de templates Bicep.
-- Des diagrammes d'infrastructure permettant de visualiser l'architecture des déploiements Azure, de comprendre les dépendances entre les ressources et de faciliter la maintenance et l'évolution des applications.
-- Une documentation permettant de comprendre l'outil et son utilisation.
-
-#  Modalités:
-- Le projet devra être réalisé en respectant les bonnes pratiques de développement.
-
-#  Validation du projet:
-Le projet sera validé par le responsable de l'encadrement, Philippe Merle.
-
-#  Technologie et Prérequis (Outils utilises):
-- Bicep
-- Diagrams(Python)
-- Terraform
-- Docker
-- Kubernetes
-- Azure DevOps
-
-
-# Bibliographie:
-[1] https://learn.microsoft.com/fr-fr/azure/azure-resource-manager/bicep/
-
-[2] https://fr.wikipedia.org/wiki/Infrastructure_as_code
-
-[3] https://github.com/philippemerle/AWS-CloudFormation-Diagrams
-
-[4] https://github.com/philippemerle/KubeDiagrams
-
-[5] https://diagrams.mingrammer.com
-
-[6] https://github.com/search?q=path%3A*.bicep&type=code
+lien de github:
+ https://github.com/Azure/azure-quickstart-templates
+tu trouveras de très nombreux exemples de templates Bicep et ARM JSON.

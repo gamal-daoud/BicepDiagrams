@@ -1,0 +1,192 @@
+#
+# Graphical styles (Optimisés pour reproduire l'image)
+#
+
+styles:
+
+  # Style pour le cluster principal (VNet / VpcId)
+  Network:
+    bgcolor: "#f2e6ff" # Mauve clair
+    color: "#000000"
+    label: "VpcId"
+
+  # Style pour les clusters de sécurité (NSG)
+  SecurityGroup:
+    bgcolor: "#fff5e6" # Beige / Orange clair
+    color: "#000000"
+
+  # Style pour les flèches
+  DependsOn:
+    color: "#7B8894" # Gris foncé
+    style: "solid"
+
+#
+# Azure resources mapping
+#
+
+resources:
+
+  Microsoft.Network/virtualNetworks:
+    kind: cluster
+    style: Network
+    icon:
+      classname: diagrams.azure.networking.VirtualNetworks
+
+  Microsoft.Network/networkSecurityGroups:
+    kind: cluster
+    style: SecurityGroup
+    icon:
+      classname: diagrams.azure.networking.NetworkSecurityGroups
+
+  Microsoft.Network/networkInterfaces:
+    kind: node
+    icon:
+      classname: diagrams.azure.networking.NetworkInterfaces
+
+  Microsoft.Network/applicationGateways:
+    kind: node
+    icon:
+      classname: diagrams.azure.networking.ApplicationGateways
+
+  Microsoft.Network/localNetworkGateways:
+    kind: node
+    icon:
+      path: "./icons/switch.png"
+
+  Microsoft.Compute/virtualMachines:
+    kind: node
+    icon:
+      path: "./icons/pc.png"
+
+  Microsoft.Compute/virtualMachines/extensions:
+    kind: node
+    icon:
+      classname: diagrams.azure.compute.VirtualMachine
+
+  Microsoft.Compute/virtualMachineScaleSets:
+    kind: cluster
+    icon:
+      classname: diagrams.azure.compute.VMScaleSets
+
+  Microsoft.Network/publicIPAddresses:
+    kind: node
+    icon:
+      classname: diagrams.azure.networking.PublicIpAddresses
+
+  Microsoft.Network/loadBalancers:
+    kind: cluster
+    icon:
+      classname: diagrams.azure.networking.LoadBalancers
+
+  Microsoft.Network/loadBalancers/backendAddressPools:
+    kind: node
+    icon:
+      classname: diagrams.azure.networking.LoadBalancers
+
+  Microsoft.Network/bastionHosts:
+    kind: node
+    icon:
+      classname: diagrams.azure.networking.Bastions
+
+  Microsoft.Network/virtualNetworks/virtualNetworkPeerings:
+    kind: node
+    icon:
+      classname: diagrams.azure.networking.VirtualNetworks
+
+  Microsoft.Sql/servers:
+    kind: cluster
+    icon:
+      classname: diagrams.azure.database.SQLServers
+
+  Microsoft.DBforMySQL/flexibleServers/firewallRules:
+    kind: node
+    icon:
+      classname: diagrams.azure.database.DatabaseForMysqlServers
+
+  Microsoft.OperationalInsights/workspaces:
+    kind: node
+    icon:
+      classname: diagrams.azure.analytics.LogAnalyticsWorkspaces
+
+  Microsoft.KubernetesConfiguration/fluxConfigurations:
+    kind: node
+    icon:
+      classname: diagrams.azure.compute.AKS
+
+  Microsoft.Sql/servers/databases:
+    kind: node
+    icon:
+      classname: diagrams.azure.database.SQLDatabases
+
+  Microsoft.Storage/storageAccounts:
+    kind: cluster
+    icon:
+      classname: diagrams.azure.storage.StorageAccounts
+
+  Microsoft.Storage/storageAccounts/blobServices:
+    kind: cluster
+    icon:
+      classname: diagrams.azure.storage.BlobStorage
+
+  Microsoft.Storage/storageAccounts/blobServices/containers:
+    kind: node
+    icon:
+      classname: diagrams.azure.storage.BlobStorage
+
+  Microsoft.Storage/storageAccounts/fileServices:
+    kind: cluster
+    icon:
+      classname: diagrams.azure.storage.AzureFileshares
+
+  Microsoft.Storage/storageAccounts/fileServices/shares:
+    kind: node
+    icon:
+      classname: diagrams.azure.storage.AzureFileshares
+
+  Microsoft.Web/serverfarms:
+    kind: node
+    icon:
+      classname: diagrams.azure.web.AppServicePlans
+
+  Microsoft.Web/sites:
+    kind: node
+    icon:
+      classname: diagrams.azure.web.AppServices
+
+  Microsoft.KeyVault/vaults:
+    kind: node
+    icon:
+      classname: diagrams.azure.security.KeyVaults
+
+  Microsoft.ContainerService/managedClusters:
+    kind: node
+    icon:
+      classname: diagrams.azure.compute.AKS
+
+
+  Microsoft.Insights/components:
+    kind: node
+    icon:
+      classname: diagrams.azure.devops.ApplicationInsights
+
+  Microsoft.DocumentDB/databaseAccounts:
+    kind: node
+    icon:
+      classname: diagrams.azure.database.CosmosDb
+
+  Microsoft.DBforMySQL/flexibleServers:
+    kind: node
+    icon:
+      classname: diagrams.azure.database.DatabaseForMysqlServers
+
+  Microsoft.Network/virtualNetworks/subnets:
+    kind: cluster
+    style: Network
+    icon:
+      classname: diagrams.azure.networking.Subnet
+
+  # Fallback
+  Unsupported Resource Type:
+    kind: node
+    icon:
+      classname: diagrams.generic.blank.Blank

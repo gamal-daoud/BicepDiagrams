@@ -1,0 +1,13 @@
+# Mapping of Azure resource types to specific templates and default versions
+# format:
+# Provider/Type:
+#   template: "path/to/template.j2"
+#   apiVersion: "2021-01-01"
+
+Microsoft.Network/virtualNetworks:
+  template: "Microsoft.Network/virtualNetworks.j2"
+  apiVersion: "2021-02-01"
+
+Microsoft.Network/subnets:
+  template: "Microsoft.Network/subnets.j2"
+  apiVersion: "2021-02-01"

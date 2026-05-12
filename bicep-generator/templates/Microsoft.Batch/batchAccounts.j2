@@ -1,0 +1,9 @@
+resource {{ name }} 'Microsoft.Batch/batchAccounts@{{ api_version|default('2021-01-01') }}' = {
+  name: '{{ name }}'
+  {% if parent_id %}parent: {{ parent_id }}{% endif %}
+  location: {{ location|to_bicep if location else 'resourceGroup().location' }}
+  properties: {
+    {% if description %}description: {{ description|to_bicep }}{% endif %}
+    {% if oneOf %}oneOf: {{ oneOf|to_bicep }}{% endif %}
+  }
+}

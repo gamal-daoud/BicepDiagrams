@@ -1,0 +1,48 @@
+digraph "Azure Infrastructure: aws-to-azure.bicep" {
+	graph [bb="0,0,296,349",
+		dpi=120,
+		fontcolor="#2D3436",
+		fontname="Sans-Serif",
+		fontsize=15,
+		label="Azure Infrastructure: aws-to-azure.bicep",
+		lheight=0.24,
+		lp="148,12.5",
+		lwidth=3.89,
+		nodesep=0.6,
+		pad=2.0,
+		rankdir=TB,
+		ranksep=0.7,
+		splines=ortho
+	];
+	node [fixedsize=true,
+		fontcolor="#2D3436",
+		fontname="Sans-Serif",
+		fontsize=13,
+		height=1.4,
+		imagescale=true,
+		label="\N",
+		labelloc=b,
+		shape=box,
+		style=rounded,
+		width=1.4
+	];
+	edge [color="#7B8894"];
+	"920abf2ee2134a37907cc7a505e253e2"	[height=1.9028,
+		image="/home/gamal-daoud/Documents/BicepDiagrams/venv/lib/python3.13/site-packages/resources/azure/web/app-services.png",
+		label="diagramai-api{0}...",
+		pos="148,93.5",
+		shape=none,
+		width=1.4028];
+	bb33017d29374bd0a59ba695c33b9442	[height=1.9028,
+		image="/home/gamal-daoud/Documents/BicepDiagrams/venv/lib/python3.13/site-packages/resources/azure/web/app-service-plans.png",
+		label="diagramai-plan",
+		pos="148,280.5",
+		shape=none,
+		width=1.4028];
+	bb33017d29374bd0a59ba695c33b9442 -> "920abf2ee2134a37907cc7a505e253e2"	[dir=forward,
+		fontcolor="#2D3436",
+		fontname="Sans-Serif",
+		fontsize=13,
+		pos="e,148,162.06 148,211.93 148,211.93 148,172.06 148,172.06",
+		style=solid];
+}

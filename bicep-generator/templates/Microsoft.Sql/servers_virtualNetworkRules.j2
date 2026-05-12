@@ -1,0 +1,7 @@
+resource {{ name }} 'Microsoft.Sql/servers/virtualNetworkRules@{{ api_version|default('2021-01-01') }}' = {
+  name: '{{ name }}'
+  {% if parent_id %}parent: {{ parent_id }}{% endif %}
+  location: {{ location|to_bicep if location else 'resourceGroup().location' }}
+  properties: {
+  }
+}

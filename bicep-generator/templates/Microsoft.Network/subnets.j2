@@ -1,0 +1,7 @@
+resource {{ name }} 'Microsoft.Network/virtualNetworks/subnets@2021-02-01' = {
+  name: '{{ name }}'
+  parent: {{ parent_id }}
+  properties: {
+    addressPrefix: '{{ addressPrefix }}'
+  }
+}
