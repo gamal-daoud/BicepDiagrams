@@ -1,1 +1,0 @@
-../bicep-diagrams.py

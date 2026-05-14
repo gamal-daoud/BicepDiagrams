@@ -1,9 +1,0 @@
-resource {{ name }} 'Microsoft.Network/virtualNetworks@2021-02-01' = {
-  name: '{{ name }}'
-  location: {{ location|to_bicep if location else 'resourceGroup().location' }}
-  properties: {
-    addressSpace: {
-      addressPrefixes: {{ addressSpace.addressPrefixes|to_bicep }}
-    }
-  }
-}
