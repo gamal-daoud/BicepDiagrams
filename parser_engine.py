@@ -163,7 +163,7 @@ def compile_bicep(bicep_path):
         raise FileNotFoundError(f"Fichier non trouvé: {bicep_path}")
     
     proc = subprocess.run(
-        ['az', 'bicep', 'build', '--file', str(bicep_file), '--stdout'],
+        ['bicep', 'build', str(bicep_file)],
         capture_output=True, text=True
     )
     

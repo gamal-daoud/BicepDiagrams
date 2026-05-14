@@ -12,7 +12,7 @@ def analyze_bicep_file(bicep_path):
     """Analyse un fichier Bicep et retourne les ressources"""
     # Compiler en ARM JSON
     proc = subprocess.run(
-        ['az', 'bicep', 'build', '--file', bicep_path, '--stdout'],
+        ['bicep', 'build', bicep_path, '--stdout'],
         capture_output=True,
         text=True
     )
@@ -41,7 +41,7 @@ def analyze_bicep_file(bicep_path):
     return resource_types
 
 def main():
-    bicep_dir = Path("/home/gamal-daoud/Documents/BicepDiagrams/bicep-generator/input")
+    bicep_dir = Path("/home/gamal-daoud/Documents/BicepDiagrams/input")
     bicep_files = sorted(bicep_dir.glob("*.bicep"))
 
     print("ANALYSE DES RESSOURCES PAR FICHIER BICEP")

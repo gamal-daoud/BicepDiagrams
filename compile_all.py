@@ -10,8 +10,8 @@ from pathlib import Path
 import json
 
 DIRNAME = os.path.dirname(os.path.abspath(__file__))
-INPUT_DIR = os.path.join(DIRNAME, "bicep-generator", "input")
-OUTPUT_DIR = os.path.join(DIRNAME, "bicep-generator", "output")
+INPUT_DIR = os.path.join(DIRNAME, "input")
+OUTPUT_DIR = os.path.join(DIRNAME, "output")
 
 def compile_all_biceps(output_format="png", output_dir=None):
     """Compile tous les fichiers .bicep"""

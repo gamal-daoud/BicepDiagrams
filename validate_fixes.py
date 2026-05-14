@@ -99,12 +99,12 @@ def validate_simple_vnet_compilation():
     print("\nTest de compilation simple_vnet.bicep...")
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    bicep_file = os.path.join(script_dir, "bicep-generator", "input", "simple_vnet.bicep")
+    bicep_file = os.path.join(script_dir, "input", "simple_vnet.bicep")
 
     try:
         # Compiler en ARM JSON
         proc = subprocess.run(
-            ['az', 'bicep', 'build', '--file', bicep_file, '--stdout'],
+            ['bicep', 'build', bicep_file, '--stdout'],
             capture_output=True,
             text=True
         )

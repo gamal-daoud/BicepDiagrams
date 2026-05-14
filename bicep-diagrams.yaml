@@ -1,4 +1,4 @@
-#
+
 # Graphical styles (Optimisés pour reproduire l'image)
 #
 
@@ -163,7 +163,6 @@ resources:
     icon:
       classname: diagrams.azure.compute.AKS
 
-
   Microsoft.Insights/components:
     kind: node
     icon:
@@ -190,3 +189,19 @@ resources:
     kind: node
     icon:
       classname: diagrams.generic.blank.Blank
+
+  Microsoft.App/managedEnvironments:
+    kind: node
+    icon:
+      classname: diagrams.azure.appservices.AppServiceEnvironments
+
+  Microsoft.App/containerApps:
+    kind: node
+    icon:
+      classname: diagrams.azure.containers.ContainerInstances
+
+  Microsoft.AAD/domainServices:
+    kind: node
+    icon:
+      classname: diagrams.azure.identity.ADDomainServices
+

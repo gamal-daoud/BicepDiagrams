@@ -1,0 +1,21 @@
+Guide pour ajouter un nouveau fichier Bicep
+Pour chaque nouveau fichier .bicep :
+
+Étape 1 — Placer le fichier dans le dossier input :
+
+bash
+cp monfichier.bicep bicep-generator/input/
+
+Étape 2 — Générer le diagramme :
+
+bash
+python3 bicep-diagrams.py bicep-generator/input/monfichier.bicep -o monfichier -f png
+
+Étape 3 — Si un type de ressource est inconnu ([Warning] Type inconnu), l'ajouter dans bicep-diagrams.yaml :
+
+yaml
+Microsoft.NouveauProvider/nouvelleRessource:
+    kind: node   # ou "cluster"
+    icon:
+      classname: diagrams.azure.CATEGORIE.NomIcone
+Les fichiers à modifier sont : bicep-diagrams.yaml (obligatoire si nouvelle ressource) et bicep-diagrams.py (jamais nécessaire pour un simple ajout).

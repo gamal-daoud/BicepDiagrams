@@ -70,7 +70,7 @@ def run_visualization(bicep_path, output_filename, output_format, dpi, use_clust
     print(f"[Info] Compiling {bicep_path}...")
 
     proc = subprocess.run(
-        ['az', 'bicep', 'build', '--file', bicep_path, '--stdout'],
+        ['bicep', 'build', bicep_path, '--stdout'],
         capture_output=True,
         text=True
     )
@@ -149,14 +149,7 @@ def run_visualization(bicep_path, output_filename, output_format, dpi, use_clust
                 
                 if icon_path:
                     # Support pour les icônes personnalisées locales
-                    # On résout le chemin par rapport au dossier du script/YAML
                     full_icon_path = os.path.join(DIRNAME, icon_path)
-                    
-                    # Si non trouvé, on cherche dans le sous-dossier bicep-generator (cas courant)
-                    if not os.path.exists(full_icon_path):
-                        alt_path = os.path.join(DIRNAME, "bicep-generator", icon_path)
-                        if os.path.exists(alt_path):
-                            full_icon_path = alt_path
                     
                     from diagrams.custom import Custom
                     def custom_node_wrapper(label, **kwargs):
