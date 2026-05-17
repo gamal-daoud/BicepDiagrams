@@ -51,12 +51,16 @@ resources:
   Microsoft.Network/localNetworkGateways:
     kind: node
     icon:
-      path: "./icons/switch.png"
+      # path: "./icons/switch.png"
+      # classname: diagrams.generic.network.Switch
+      classname: diagrams.generic.network.Router
 
   Microsoft.Compute/virtualMachines:
     kind: node
     icon:
-      path: "./icons/pc.png"
+      #path: "./icons/pc.png"
+      classname: diagrams.onprem.client.Client
+      # classname: diagrams.onprem.compute.Server
 
   Microsoft.Compute/virtualMachines/extensions:
     kind: node
@@ -204,4 +208,4 @@ resources:
     kind: node
     icon:
       classname: diagrams.azure.identity.ADDomainServices
-
+  
