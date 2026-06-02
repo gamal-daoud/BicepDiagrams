@@ -24,16 +24,22 @@ DEFAULT_OUTPUT_DPI = 300
 DEFAULT_LABEL_WIDTH = 18
 
 # 🔹 Charger dynamiquement une classe diagrams
+# Cette fonction récupère la classe diagrams correspondant à une ressource Azure
+# Flux: bicycle-diagrams.yaml → classname: 'diagrams.azure.compute.VirtualMachine' → get_diagram_class() → classe Python
 def get_diagram_class(classname):
+    # Pas de classe spécifiée → utiliser icône personnalisée depuis icons/
     if not classname:
         return None
     try:
+        # Extraction du nom du module et de la classe
+        # Ex: 'diagrams.azure.compute.VirtualMachine' → module='diagrams.azure.compute', class='VirtualMachine'
         idx = classname.rfind('.')
         if idx != -1:
             module = importlib.import_module(classname[:idx])
             return getattr(module, classname[idx+1:])
             
     except Exception as e:
+        # Si la classe n'existe pas, retourner None pour utiliser icône personnalisée
         print(f"[Warning] Impossible de charger {classname}: {e}")
     return None
 
@@ -122,6 +128,8 @@ def run_visualization(bicep_path, output_filename, output_format, dpi, use_clust
         drawn_nodes = {}
         
         # 🔹 Build hierarchy map
+        # Construire la hiérarchie des ressources pour identifier clusters et enfants
+        # Cette map permet à draw_recursive de parcourir l'arborescence
         hierarchy = {}
         for n in nodes_data:
             p = n.get('parent')
@@ -136,19 +144,73 @@ def run_visualization(bicep_path, output_filename, output_format, dpi, use_clust
                 res_type = n['type']
                 rconfig = resources_config.get(res_type, unsupported_config)
                 
-                # A resource is a cluster if YAML says so OR if it has children
+                # Déterminer si c'est un cluster (contient des enfants) ou un nœud
+                # Les clusters (VNets, NSGs, LoadBalancers) s'affichent en groupes
+                # Les nœuds (VMs, NICs, Databases) s'affichent isolément
                 has_children = n['id'] in hierarchy
                 is_cluster = use_clusters and (rconfig.get('kind') == 'cluster' or has_children)
                 
-                style = compute_style(rconfig.get("style", {}), styles_config)
-                icon_config = rconfig.get("icon", {})
-                classname = icon_config.get("classname")
-                icon_path = icon_config.get("path")
+                # Récupérer les TAGS BICEP pour personnalisation dynamique
+                # Tags disponibles: role, icon, status, style, team, country, label, etc.
+                # Flux Bicep: tags: { role: 'trophy', icon: 'coupe.png' } → appliqué ici
+                tags = n.get('tags', {})
+                if not isinstance(tags, dict):
+                    tags = {}
+                icon_tag = tags.get('icon')           # Icône personnalisée (ex: 'coupe.png')
+                role_tag = tags.get('role')           # Rôle (ex: 'trophy', 'final')
+                status_tag = tags.get('status')       # État (ex: 'qualified')
+
+                # 1. DÉTERMINATION DU STYLE
+                # Flux: tags.role → TrophyStyle (YAML) → style Python → couleurs
+                # Le style détermine les couleurs (bgcolor, color, label) du nœud
+                style_name = tags.get('style')
+                if not style_name:
+                    # Si pas de style direct, chercher basé sur le rôle
+                    # Ex: role='trophy' → TrophyStyle (défini dans styles: section du YAML)
+                    if role_tag:
+                        style_name = f"{role_tag.capitalize()}Style"
+                    elif status_tag or icon_tag:
+                        style_name = "DefaultTeamStyle"
+
+                if style_name and style_name in styles_config:
+                    style = compute_style(style_name, styles_config)
+                else:
+                    style = compute_style(rconfig.get("style", {}), styles_config)
+
+                # 2. DÉTERMINATION DE L'ICÔNE
+                # Flux: icon tag → icons/fichier.png   OU   classname → classe Diagrams
+                # Trois sources possibles:
+                #   a) Tag 'icon' dans Bicep (priorité 1) → icons/nom.png
+                #   b) Rôle spécial 'trophy' (priorité 2) → icons/coupe.png
+                #   c) Classe Diagrams d'Azure (priorité 3) → diagrams.azure.compute.VM
+                if icon_tag:
+                    # (A) Icône personnalisée depuis le tag Bicep
+                    # Ex: icon: 'paris-saint-germain.png' → ./icons/paris-saint-germain.png
+                    if not icon_tag.startswith('/') and not icon_tag.startswith('./'):
+                        icon_path = f"./icons/{icon_tag}"
+                    else:
+                        icon_path = icon_tag
+                    classname = None
+                elif role_tag == 'trophy':
+                    # (B) Icône spéciale pour le rôle 'trophy'
+                    # Ex: role='trophy' → ./icons/coupe.png
+                    icon_path = "./icons/coupe.png"
+                    classname = None
+                else:
+                    # (C) Icône depuis la classe Diagrams (bicep-diagrams.yaml)
+                    # Ex: classname: 'diagrams.azure.compute.VirtualMachine'
+                    icon_config = rconfig.get("icon", {})
+                    classname = icon_config.get("classname")
+                    # Fallback icône personnalisée si classname échoue
+                    icon_path = icon_config.get("path")
                 
+                # Charger la classe Diagrams (ex: VirtualMachine)
+                # Cette fonction importe dynamiquement la classe correspondante
                 node_class = get_diagram_class(classname)
                 
                 if icon_path:
-                    # Support pour les icônes personnalisées locales
+                    # Utiliser une icône personnalisée depuis le dossier icons/
+                    # Custom() permet d'utiliser des fichiers PNG sans classe Diagrams
                     full_icon_path = os.path.join(DIRNAME, icon_path)
                     
                     from diagrams.custom import Custom
@@ -156,21 +218,28 @@ def run_visualization(bicep_path, output_filename, output_format, dpi, use_clust
                         return Custom(label, full_icon_path, **kwargs)
                     node_class = custom_node_wrapper
                 elif not node_class:
+                    # Pas de classname valide et pas d'icon_path → utiliser Blank
+                    # Blank = nœud vide (aucune icône, juste le texte)
                     from diagrams.generic.blank import Blank
-                    if parent_id is None: # Only warn for top-level unknown resources to avoid noise
+                    if parent_id is None:
                         print(f"[Warning] Type inconnu: {res_type}")
                     node_class = Blank
                 
                 if is_cluster:
-                    # Filter out non-Graphviz attributes for Cluster (bgcolor, color, etc are usually ok)
+                    # AFFICHAGE D'UN CLUSTER
+                    # Les clusters (VNets, NSGs, LoadBalancers) regroupent visuellement les enfants
+                    # Filtre les attributs valides pour Graphviz (bgcolor, color, label, style)
                     cluster_style = {k: v for k, v in style.items() if k in ['bgcolor', 'color', 'label', 'style']}
                     with Cluster(format_label(n['label'], width=24), graph_attr=cluster_style):
-                        # Create the resource node itself inside the cluster
+                        # Créer le nœud de la ressource à l'intérieur du cluster
                         node_style = {k: v for k, v in style.items() if k != 'label'}
                         drawn_nodes[n['id']] = node_class(format_label(n['label']), **node_style)
+                        # Afficher les enfants récursivement (subnets dans VNet, etc.)
                         if has_children:
                             draw_recursive(n['id'])
                 else:
+                    # AFFICHAGE D'UN NŒUD SIMPLE
+                    # Les nœuds (VMs, NICs, Databases) s'affichent isolément
                     node_style = {k: v for k, v in style.items() if k != 'label'}
                     drawn_nodes[n['id']] = node_class(format_label(n['label']), **node_style)
 

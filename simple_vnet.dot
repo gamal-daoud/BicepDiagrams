@@ -1,0 +1,86 @@
+digraph "Azure Infrastructure: simple_vnet.bicep" {
+	graph [bb="0,0,290,435",
+		dpi=300,
+		fontcolor="#2D3436",
+		fontname="Sans-Serif",
+		fontsize=15,
+		label="Azure Infrastructure: simple_vnet.bicep",
+		lheight=0.24,
+		lp="145,12.5",
+		lwidth=3.81,
+		nodesep=0.60,
+		pad=2.0,
+		rankdir=TB,
+		ranksep=0.75,
+		splines=curved
+	];
+	node [fixedsize=true,
+		fontcolor="#2D3436",
+		fontname="Sans-Serif",
+		fontsize=13,
+		height=1.4,
+		imagescale=true,
+		label="\N",
+		labelloc=b,
+		shape=box,
+		style=rounded,
+		width=1.4
+	];
+	edge [color="#7B8894"];
+	subgraph cluster_myVnet {
+		graph [bb="78,33,212,427",
+			bgcolor="#f2e6ff",
+			color="#000000",
+			fontname="Sans-Serif",
+			fontsize=12,
+			label=VpcId,
+			labeljust=l,
+			lheight=0.18,
+			lp="102,416.5",
+			lwidth=0.44,
+			pencolor="#AEB6BE",
+			rankdir=LR,
+			shape=box,
+			style=rounded
+		];
+		subgraph cluster_subnetA {
+			graph [bb="86,224,204,398",
+				bgcolor="#f2e6ff",
+				color="#000000",
+				fontname="Sans-Serif",
+				fontsize=12,
+				label=VpcId,
+				labeljust=l,
+				lheight=0.18,
+				lp="110,387.5",
+				lwidth=0.44,
+				pencolor="#AEB6BE",
+				rankdir=LR,
+				shape=box,
+				style=rounded
+			];
+			"12372981b2e3424b9b6d8668acd938d6"	[bgcolor="#f2e6ff",
+				color="#000000",
+				height=1.9028,
+				image="/home/gamal-daoud/.local/lib/python3.13/site-packages/resources/azure/networking/subnet.png",
+				label=subnetA,
+				pos="145,300.5",
+				shape=none,
+				width=1.4028];
+		}
+		"15b7a5026d7344ef98175a709637bde9"	[bgcolor="#f2e6ff",
+			color="#000000",
+			height=1.9028,
+			image="/home/gamal-daoud/.local/lib/python3.13/site-packages/resources/azure/networking/virtual-networks.png",
+			label=myVnet,
+			pos="145,109.5",
+			shape=none,
+			width=1.4028];
+		"12372981b2e3424b9b6d8668acd938d6" -> "15b7a5026d7344ef98175a709637bde9"	[dir=forward,
+			fontcolor="#2D3436",
+			fontname="Sans-Serif",
+			fontsize=13,
+			pos="e,145,178.04 145,231.95 145,213.73 145,199.72 145,188.09",
+			style=solid];
+	}
+}

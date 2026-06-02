@@ -7,6 +7,9 @@ import json
 import subprocess
 from pathlib import Path
 import sys
+# from diagrams import Diagram
+# from diagrams.azure.networking import Subnet
+
 
 def analyze_bicep_file(bicep_path):
     """Analyse un fichier Bicep et retourne les ressources"""
@@ -66,7 +69,7 @@ def main():
                     clean_name = clean_name[:57] + "..."
                 print(f"     - {clean_name}")
             if len(res_names) > 2:
-                print(f"     ... et {len(res_names)-2} autre(s)")
+                print(f"... et {len(res_names)-2} autre(s)")
 
 if __name__ == "__main__":
     main()

@@ -21,7 +21,7 @@ BicepDiagrams/
 │   ├── simple_vnet.bicep
 │   ├── storage.bicep
 │   ├── wordpress_proper.bicep
-│   └── ... (20 fichiers)
+│   └── ... (60 fichiers)
 │
 ├── output/                 => Résultats générés
 │   ├── *.png (Diagrammes)
@@ -162,6 +162,9 @@ python3 bicep-diagrams.py input.bicep -o output --flat -f png
 ### Compiler plusieurs fichiers
 ```bash
 python3 bicep-diagrams.py file1.bicep file2.bicep file3.bicep -o output
+
+# Affiche un ARM json
+bicep build input/network_custom.bicep --stdout > input/network_custom.json
 ```
 
 ## Formats de Sortie
@@ -286,6 +289,12 @@ python3 validate_fixes.py
 bash USAGE.sh
 ```
 
+### Exécuter un test
+```bash
+python3 test_diagrams.py 
+```
+
+
 ##  Ressources
 
 - [Documentation Azure Bicep](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/)
@@ -307,8 +316,68 @@ MIT
 
 
 ## outil de génération de diagrammes d'architecture à partir de fichiers Bicep.
-- diagram gpt
-- ARMVIZ
--
+- 1 DiagramGPT / Eraser.io
+il existe une version gratuite, mais limitée :
+
+seulement quelques fichiers,
+nombre limité de générations IA,
+historique limité.
 
 
+
+- 2 ARMVIZ
+
+ARMVIZ
+Gratuit
+Pas besoin d’abonnement
+Utilisable directement via navigateur
+
+Fonctionne avec :
+Bicep → ARM JSON → ARMVIZ
+
+Très bien pour :
+
+visualiser ressources Azure,
+dépendances,
+architecture ARM.
+
+3. Lucidchart
+
+    Plateforme de diagramme professionnel
+    Support Azure avec formes officielles
+    Collaboration en temps réel
+
+
+
+
+Outils Identifiés :
+1. ARMVIZ (http://armviz.io/ )
+
+    Visualiseur web pour templates ARM JSON
+    Affiche les ressources avec icônes Azure officielles
+    Interface intuitive et gratuite
+
+2. ARM Template Viewer (VS Code Extension)
+
+    Extension officielle Microsoft pour VS Code
+    Affiche aperçu graphique des templates ARM
+    Icônes Azure officielles
+
+
+3. ARM Template Visualizer (VS Code Extension - ytechie)
+
+    Visualise les dépendances ARM comme un arbre
+    Alternative populaire à ARMVIZ
+
+
+4. Bicep Visualizer (VS Code Extension)
+
+    Affichage graphique des ressources Bicep
+    Intégré dans VS Code
+
+
+6. Lucidchart
+
+    Plateforme de diagramme professionnel
+    Support Azure avec formes officielles
+    Collaboration en temps réel

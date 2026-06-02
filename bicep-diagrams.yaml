@@ -1,5 +1,4 @@
-
-# Graphical styles (Optimisés pour reproduire l'image)
+# Graphical styles
 #
 
 styles:
@@ -9,6 +8,40 @@ styles:
     bgcolor: "#f2e6ff" # Mauve clair
     color: "#000000"
     label: "VpcId"
+
+  # Styles Champions League - Nœuds de tournoi (legacy names for compatibility)
+  QuarterFinalNode:
+    bgcolor: "#0d1b2a"
+    color: "#64b5f6"
+
+  SemiFinalNode:
+    bgcolor: "#1a237e"
+    color: "#90caf9"
+
+  FinalNode:
+    bgcolor: "#b71c1c"
+    color: "#ffcdd2"
+
+  # Styles Champions League - Configuration par rôle (utilise les tags du Bicep)
+  TrophyStyle:
+    bgcolor: "#ffd700"
+    color: "#000000"
+
+  FinalStyle:
+    bgcolor: "#b71c1c"
+    color: "#ffcdd2"
+
+  SemifinalStyle:
+    bgcolor: "#1a237e"
+    color: "#90caf9"
+
+  QuarterfinalStyle:
+    bgcolor: "#0d1b2a"
+    color: "#64b5f6"
+
+  DefaultTeamStyle:
+    bgcolor: "#1a1a2e"
+    color: "#ffffff"
 
   # Style pour les clusters de sécurité (NSG)
   SecurityGroup:
@@ -20,192 +53,376 @@ styles:
     color: "#7B8894" # Gris foncé
     style: "solid"
 
-#
-# Azure resources mapping
-#
+  # Styles pour le diagramme de football/sports
+  MainContainer:
+    bgcolor: "#1a1a2e"
+    color: "#ffd700"
+    label: "CHAMPIONS LEAGUE 2016"
+
+  TitleStyle:
+    bgcolor: "#0f3460"
+    color: "#ffd700"
+    label: "CHAMPIONS LEAGUE"
+
+  BundesligaStyle:
+    bgcolor: "#e94560"
+    color: "#ffffff"
+    label: "BUNDESLIGA"
+
+  QualifiedStyle:
+    bgcolor: "#16213e"
+    color: "#00ff88"
+    label: "QUALIFIÉS"
+
+  TeamNode:
+    bgcolor: "#1a1a2e"
+    color: "#ffffff"
+
+  TrophyNode:
+    bgcolor: "#ffd700"
+    color: "#000000"
+
+
 
 resources:
 
+  # RÉSEAU - Virtual Networks (Cluster)
+  # Les VNets sont des clusters car ils peuvent contenir d'autres ressources (subnets, NICs)
   Microsoft.Network/virtualNetworks:
     kind: cluster
     style: Network
     icon:
       classname: diagrams.azure.networking.VirtualNetworks
+      # path: '/icons/vnet.png'  # Icône alternative si classname échoue
 
+  # RÉSEAU - Network Security Groups (Cluster)
+  # NSGs sont des clusters pour les règles de sécurité
   Microsoft.Network/networkSecurityGroups:
     kind: cluster
     style: SecurityGroup
     icon:
       classname: diagrams.azure.networking.NetworkSecurityGroups
+      # path: '/icons/switch.png'  # Icône alternative
 
+  #RÉSEAU - Network Interfaces (Node)
   Microsoft.Network/networkInterfaces:
     kind: node
     icon:
       classname: diagrams.azure.networking.NetworkInterfaces
+      # path: '/icons/pc.png'  # Icône alternative
 
+  # RÉSEAU - Application Gateways (Node)
   Microsoft.Network/applicationGateways:
     kind: node
     icon:
       classname: diagrams.azure.networking.ApplicationGateways
+    
 
+  # RÉSEAU - Local Network Gateways (Node)
   Microsoft.Network/localNetworkGateways:
     kind: node
     icon:
-      # path: "./icons/switch.png"
-      # classname: diagrams.generic.network.Switch
       classname: diagrams.generic.network.Router
 
+  # COMPUTE - Virtual Machines (Node)
   Microsoft.Compute/virtualMachines:
     kind: node
     icon:
-      #path: "./icons/pc.png"
-      classname: diagrams.onprem.client.Client
-      # classname: diagrams.onprem.compute.Server
+      classname: diagrams.azure.compute.VirtualMachine
 
+  # COMPUTE - VM Extensions (Node)
   Microsoft.Compute/virtualMachines/extensions:
     kind: node
     icon:
       classname: diagrams.azure.compute.VirtualMachine
 
+  # COMPUTE - Virtual Machine Scale Sets (Cluster)
   Microsoft.Compute/virtualMachineScaleSets:
     kind: cluster
     icon:
       classname: diagrams.azure.compute.VMScaleSets
 
+  # RÉSEAU - Public IP Addresses (Node)
   Microsoft.Network/publicIPAddresses:
     kind: node
     icon:
       classname: diagrams.azure.networking.PublicIpAddresses
+    
 
+  # RÉSEAU - Load Balancers (Cluster)
   Microsoft.Network/loadBalancers:
     kind: cluster
     icon:
       classname: diagrams.azure.networking.LoadBalancers
 
+  # RÉSEAU - Load Balancer Backend Address Pools (Node)
   Microsoft.Network/loadBalancers/backendAddressPools:
     kind: node
     icon:
       classname: diagrams.azure.networking.LoadBalancers
 
+  # RÉSEAU - Bastion Hosts (Node)
   Microsoft.Network/bastionHosts:
     kind: node
     icon:
       classname: diagrams.azure.networking.Bastions
+    
 
+  # RÉSEAU - Virtual Network Peerings (Node)
   Microsoft.Network/virtualNetworks/virtualNetworkPeerings:
     kind: node
     icon:
       classname: diagrams.azure.networking.VirtualNetworks
 
+  # DATABASE - SQL Servers (Cluster)
   Microsoft.Sql/servers:
     kind: cluster
     icon:
       classname: diagrams.azure.database.SQLServers
 
+  # DATABASE - MySQL Firewall Rules (Node)
   Microsoft.DBforMySQL/flexibleServers/firewallRules:
     kind: node
     icon:
       classname: diagrams.azure.database.DatabaseForMysqlServers
+  
 
+  # ANALYTICS - Log Analytics Workspaces (Node)
   Microsoft.OperationalInsights/workspaces:
     kind: node
     icon:
       classname: diagrams.azure.analytics.LogAnalyticsWorkspaces
 
+  # KUBERNETES - Flux Configurations (Node)
   Microsoft.KubernetesConfiguration/fluxConfigurations:
     kind: node
     icon:
       classname: diagrams.azure.compute.AKS
 
+
+  # DATABASE - SQL Databases (Node)
   Microsoft.Sql/servers/databases:
     kind: node
     icon:
       classname: diagrams.azure.database.SQLDatabases
 
+
+  # STORAGE - Storage Accounts (Node)
   Microsoft.Storage/storageAccounts:
-    kind: cluster
+    kind: node
     icon:
       classname: diagrams.azure.storage.StorageAccounts
 
+  # STORAGE - Blob Services (Cluster)
   Microsoft.Storage/storageAccounts/blobServices:
     kind: cluster
     icon:
       classname: diagrams.azure.storage.BlobStorage
 
+  #STORAGE - Blob Containers (Node)
   Microsoft.Storage/storageAccounts/blobServices/containers:
     kind: node
     icon:
       classname: diagrams.azure.storage.BlobStorage
 
+  # STORAGE - File Services (Cluster)
   Microsoft.Storage/storageAccounts/fileServices:
     kind: cluster
     icon:
       classname: diagrams.azure.storage.AzureFileshares
 
+  # STORAGE - File Shares (Node)
   Microsoft.Storage/storageAccounts/fileServices/shares:
     kind: node
     icon:
       classname: diagrams.azure.storage.AzureFileshares
 
+  # WEB - App Service Plans (Node)
   Microsoft.Web/serverfarms:
     kind: node
     icon:
       classname: diagrams.azure.web.AppServicePlans
 
+  # WEB - App Services (Node)
   Microsoft.Web/sites:
     kind: node
     icon:
       classname: diagrams.azure.web.AppServices
 
+
+  #SECURITY - Key Vaults (Node)
   Microsoft.KeyVault/vaults:
     kind: node
     icon:
       classname: diagrams.azure.security.KeyVaults
 
+
+  # KUBERNETES - AKS Clusters (Node)
   Microsoft.ContainerService/managedClusters:
     kind: node
     icon:
       classname: diagrams.azure.compute.AKS
 
+
+  # DEVOPS - Application Insights (Node)
   Microsoft.Insights/components:
     kind: node
     icon:
       classname: diagrams.azure.devops.ApplicationInsights
 
+  # DEVOPS - Auto Scale Settings (Node)
+  Microsoft.Insights/autoscalesettings:
+    kind: node
+    icon:
+      classname: diagrams.azure.devops.ApplicationInsights
+
+  #DATABASE - Cosmos DB (Node)
   Microsoft.DocumentDB/databaseAccounts:
     kind: node
     icon:
       classname: diagrams.azure.database.CosmosDb
 
+  #DATABASE - MySQL Flexible Servers (Node)
   Microsoft.DBforMySQL/flexibleServers:
     kind: node
     icon:
       classname: diagrams.azure.database.DatabaseForMysqlServers
 
+  # RÉSEAU - Virtual Network Subnets (Cluster)
   Microsoft.Network/virtualNetworks/subnets:
     kind: cluster
     style: Network
     icon:
       classname: diagrams.azure.networking.Subnet
 
-  # Fallback
-  Unsupported Resource Type:
-    kind: node
-    icon:
-      classname: diagrams.generic.blank.Blank
-
+  # CONTAINER - Managed Environments (Node)
   Microsoft.App/managedEnvironments:
     kind: node
     icon:
       classname: diagrams.azure.appservices.AppServiceEnvironments
 
+  # CONTAINER - Container Apps (Node)
   Microsoft.App/containerApps:
     kind: node
     icon:
       classname: diagrams.azure.containers.ContainerInstances
 
+  # IDENTITY - AAD Domain Services (Node)
   Microsoft.AAD/domainServices:
     kind: node
     icon:
       classname: diagrams.azure.identity.ADDomainServices
-  
+
+  # IDENTITY - Managed Identities (Node)
+  Microsoft.ManagedIdentity/userAssignedIdentities:
+    kind: node
+    icon:
+      classname: diagrams.azure.identity.ManagedIdentities
+
+  # DATABASE - SQL Firewall Rules (Node)
+  Microsoft.Sql/servers/firewallRules:
+    kind: node
+    icon:
+      classname: diagrams.azure.database.SQLServers
+
+  # SECURITY - Role Assignments (Node)
+  Microsoft.Authorization/roleAssignments:
+    kind: node
+    icon:
+      classname: diagrams.azure.identity.ConditionalAccess
+
+  # RÉSEAU - Network Virtual Appliances (Node)
+  Microsoft.Network/networkVirtualAppliances:
+    kind: node
+    icon:
+      classname: diagrams.azure.networking.VirtualRouter
+
+  # DATABASE - Redis Cache (Node)
+  Microsoft.Cache/redis:
+    kind: node
+    icon:
+      classname: diagrams.azure.database.CacheForRedis
+
+  # Configuration pour les ressources (le 26 mai)
+  # ANALYTICS - Data Lake Store Accounts (Node)
+  Microsoft.DataLakeStore/accounts:
+    kind: node
+    icon:
+      classname: diagrams.azure.storage.DataLakeStorage
+
+  Microsoft.ContainerService/managedClusters:
+    kind: node
+    icon:
+      #classname: diagrams.azure.compute.AKS()  # Option 1 : icône AKS générique
+      classname: diagrams.azure.containers.KubernetesServices # Option 2 : icône spécifique pour les clusters Kubernetes
+
+
+
+
+  # OPTION 1 : Utilise compute.AKS
+  Microsoft.ContainerService/managedClusters:
+    kind: node
+    icon:
+      classname: diagrams.azure.compute.AKS
+
+  # OPTION 2 (alternative) : Utilise containers.KubernetesServices
+  # Microsoft.ContainerService/managedClusters:
+  #   kind: node
+  #   icon:
+  #     classname: diagrams.azure.containers.KubernetesServices
+
+  # Container Registry - Option 1
+  #Microsoft.ContainerRegistry/registries:
+    #kind: node
+    #icon:
+      #classname: diagrams.azure.containers.ContainerRegistry
+
+  # Container Registry - Option 2 (alternative)
+  # Microsoft.ContainerRegistry/registries:
+  #   kind: node
+  #   icon:
+  #     classname: diagrams.azure.containers.Registries
+
+  # Redis Cache - Option 1
+  Microsoft.Cache/redis:
+    kind: node
+    icon:
+      classname: diagrams.azure.database.CacheForRedis
+
+  # Redis Cache - Option 2 (alternative)
+  # Microsoft.Cache/redis:
+  #   kind: node
+  #   icon:
+  #     classname: diagrams.azure.database.RedisCache
+
+  # Storage Account - Option 1
+  Microsoft.Storage/storageAccounts:
+    kind: node
+    icon:
+      classname: diagrams.azure.storage.StorageAccounts
+
+  # Virtual Network - Option 1
+  Microsoft.Network/virtualNetworks:
+    kind: node
+    icon:
+      classname: diagrams.azure.networking.VirtualNetworks
+
+  #===========main1.bicep===========
+  Microsoft.ContainerInstance/containerGroups:
+    kind: node
+    icon:
+      classname: diagrams.azure.containers.ContainerInstances
+
+# nested-assignRole (file)
+  Microsoft.Storage/storageAccounts/providers/roleAssignments:
+    kind: node
+    icon:
+      classname: diagrams.azure.identity.ConditionalAccess
+
+
+  # FALLBACK - Ressource inconnue
+  Unsupported Resource Type:
+    kind: node
+    icon:
+      classname: diagrams.generic.blank.Blank
+
