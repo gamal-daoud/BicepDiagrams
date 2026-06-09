@@ -4,49 +4,61 @@ param location string = resourceGroup().location
 @description('Required. The name of the Virtual Network to create.')
 param virtualNetworkName string
 
-@description('Required. The name of the Virtual Network to create.')
+@description('Required. The address prefix for the Virtual Network.')
 param addressPrefix string = '10.1.0.0/16'
 
 param mainSubnetAddressPrefix string = cidrSubnet(addressPrefix, 24, 1)
 
 @description('Optional. The network security rules to use in the network security group associated with the main subnet.')
-param networkSecurityRules array
+param networkSecurityRules array = []
 
 @description('Tags to apply on the resources.')
-param tags object
+param tags object = {}
 
-module nsg_subnet_main 'br/public:avm/res/network/network-security-group:0.5.2' = {
-  name: 'nsg-subnet-main-deployment'
-  params: {
-    name: 'nsg-subnet-main'
-    location: location
+@description('Name of the Network Security Group')
+param networkSecurityGroupName string = 'nsg-subnet-main'
+
+// Définition du Network Security Group (ressource directement, pas un module)
+resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2023-11-01' = {
+  name: networkSecurityGroupName
+  location: location
+  properties: {
     securityRules: networkSecurityRules
   }
+  tags: tags
 }
 
-module virtualNetwork 'br/public:avm/res/network/virtual-network:0.7.1' = {
-  name: '${virtualNetworkName}-module-avm'
-  params: {
-    addressPrefixes: [
-      addressPrefix
-    ]
-    name: virtualNetworkName
-    location: location
-    tags: tags
+// Définition du Virtual Network (ressource directement, pas un module)
+resource virtualNetwork 'Microsoft.Network/virtualNetworks@2023-11-01' = {
+  name: virtualNetworkName
+  location: location
+  properties: {
+    addressSpace: {
+      addressPrefixes: [
+        addressPrefix
+      ]
+    }
     subnets: [
       {
-        addressPrefix: mainSubnetAddressPrefix
         name: 'mainSubnet'
-        defaultOutboundAccess: false
-        networkSecurityGroupResourceId: nsg_subnet_main.outputs.resourceId
+        properties: {
+          addressPrefix: mainSubnetAddressPrefix
+          networkSecurityGroup: {
+            id: networkSecurityGroup.id
+          }
+          defaultOutboundAccess: false
+        }
       }
     ]
   }
+  tags: tags
 }
 
 @description('The name of the virtual network.')
-output vnetName string = virtualNetwork.outputs.name
+output vnetName string = virtualNetwork.name
+
 @description('The resource ID of the virtual network.')
-output vnetResourceId string = virtualNetwork.outputs.resourceId
+output vnetResourceId string = virtualNetwork.id
+
 @description('The resource ID of the main subnet.')
-output mainSubnetResourceId string = virtualNetwork.outputs.subnetResourceIds[0]
+output mainSubnetResourceId string = virtualNetwork.properties.subnets[0].id

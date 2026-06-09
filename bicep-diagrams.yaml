@@ -360,10 +360,10 @@ resources:
 
 
   # OPTION 1 : Utilise compute.AKS
-  Microsoft.ContainerService/managedClusters:
-    kind: node
-    icon:
-      classname: diagrams.azure.compute.AKS
+  # Microsoft.ContainerService/managedClusters:
+    # kind: node
+    # icon:
+      # classname: diagrams.azure.compute.AKS
 
   # OPTION 2 (alternative) : Utilise containers.KubernetesServices
   # Microsoft.ContainerService/managedClusters:
